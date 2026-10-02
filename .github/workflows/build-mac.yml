@@ -1,0 +1,33 @@
+name: Byg Blip til Mac
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  mac:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Konfigurer (Apple Silicon + Intel)
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
+
+      - name: Byg VST3 og AU
+        run: cmake --build build --config Release --target Blip_VST3 Blip_AU -j 4
+
+      - name: Signer og pak
+        run: |
+          mkdir -p dist
+          cp -R build/Blip_artefacts/Release/VST3/Blip.vst3 dist/
+          cp -R build/Blip_artefacts/Release/AU/Blip.component dist/
+          codesign --force --deep -s - dist/Blip.vst3
+          codesign --force --deep -s - dist/Blip.component
+          cp INSTALLER.txt dist/
+          cd dist && zip -ry ../Blip-mac.zip .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Blip-mac
+          path: Blip-mac.zip
