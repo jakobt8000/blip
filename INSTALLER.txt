@@ -1,0 +1,11 @@
+SÅDAN INSTALLERER DU BLIP
+
+1. Kopiér Blip.vst3 til:      ~/Library/Audio/Plug-Ins/VST3/
+   Kopiér Blip.component til: ~/Library/Audio/Plug-Ins/Components/
+   (I Finder: Gå > Gå til mappe... og indsæt stien)
+
+2. Åbn Terminal og kør (fjerner Apples karantæne-mærke, fordi pluginnet ikke er notariseret):
+   xattr -cr ~/Library/Audio/Plug-Ins/VST3/Blip.vst3 ~/Library/Audio/Plug-Ins/Components/Blip.component
+
+3. Genstart Ableton. Blip ligger under Plug-Ins > Jakob2ft.
+   Kan du ikke se den: Indstillinger > Plug-Ins > slå "Use Audio Units v2" og "Use VST3 Plug-In System Folders" til, og tryk Rescan.
